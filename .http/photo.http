@@ -11,4 +11,6 @@ Content-Type: image/jpeg
 < resources/test.jpeg
 --WebAppBoundary--
 
-###
+### Retrieve the uploaded photo
+GET {{BASE_URL}}/api/photos/{{UPLOADED_PHOTO_URL}}
+Authorization: Bearer {{JWT_TOKEN}}
