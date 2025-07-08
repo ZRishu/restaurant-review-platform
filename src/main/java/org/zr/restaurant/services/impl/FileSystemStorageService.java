@@ -1,5 +1,6 @@
 package org.zr.restaurant.services.impl;
 
+import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -28,10 +29,12 @@ public class FileSystemStorageService implements StorageService {
 
     private Path rootLocation;
 
+    @PostConstruct
     public void init() {
-        rootLocation = Paths.get(storageLocation);
+        rootLocation = Paths.get(storageLocation).toAbsolutePath().normalize();
         try {
             Files.createDirectories(rootLocation);
+            log.info("Storage location initialized: {}", rootLocation);
         } catch (IOException e) {
             throw new StorageException("Could not initialize storage location", e);
         }
@@ -43,20 +46,26 @@ public class FileSystemStorageService implements StorageService {
             if (file.isEmpty()) {
                 throw new StorageException("Cannot save an empty file");
             }
+
+            String cleanFileName = StringUtils.cleanPath(fileName);
+            if (cleanFileName.contains("..")) {
+                throw new StorageException("Cannot store file with relative path outside current directory");
+            }
+
             String extension = StringUtils.getFilenameExtension(file.getOriginalFilename());
-            String finalFileName = fileName  + "." + extension;
-            Path destinationFile = rootLocation.resolve(
-                    Paths
-                            .get(finalFileName)
-                            .normalize()
-                            .toAbsolutePath()
-            );
-            if (!destinationFile.getParent().equals(rootLocation.toAbsolutePath())) {
+            String finalFileName = cleanFileName  + "." + extension;
+
+            Path destinationFile = rootLocation
+                    .resolve(finalFileName)
+                    .normalize()
+                    .toAbsolutePath();
+            if (!destinationFile.getParent().startsWith(rootLocation)) {
                 throw new StorageException("Cannot store file outside specified directory");
             }
 
             try (InputStream inputStream = file.getInputStream()) {
                 Files.copy(inputStream, destinationFile, StandardCopyOption.REPLACE_EXISTING);
+                log.info("File stored successfully: {}", finalFileName);
             }
 
             return finalFileName;
@@ -69,11 +78,24 @@ public class FileSystemStorageService implements StorageService {
     @Override
     public Optional<Resource> loadAsResource(String filename) {
         try {
-            Path file = rootLocation.resolve(filename);
+            String cleanFilename = StringUtils.cleanPath(filename);
+            if (cleanFilename.contains("..")) {
+                log.warn("Attempted to access file with relative path: {}", filename);
+                return Optional.empty();
+            }
+
+            Path file = rootLocation.resolve(cleanFilename).normalize().toAbsolutePath();
+
+            if (!file.startsWith(rootLocation)) {
+                log.warn("Attempted to access file outside storage directory: {}", filename);
+                return Optional.empty();
+            }
+
             Resource resource = new UrlResource(file.toUri());
             if (resource.exists() || resource.isReadable()) {
                 return Optional.of(resource);
             } else {
+                log.warn("File not found or not readable: {}", filename);
                 return Optional.empty();
             }
         } catch (MalformedURLException e) {
