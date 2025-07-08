@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.zr.restaurant.domain.dtos.ErrorDto;
+import org.zr.restaurant.exceptions.BaseException;
 import org.zr.restaurant.exceptions.StorageException;
 
 @RestController
@@ -21,6 +22,17 @@ public class ErrorController {
         ErrorDto errorDto = ErrorDto.builder()
                 .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
                 .message("Unable to save or retrieve resources at this time")
+                .build();
+        return new ResponseEntity<>(errorDto, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(BaseException.class)
+    public ResponseEntity<ErrorDto> handleBaseException(BaseException ex) {
+        log.error("Caught BaseException", ex);
+
+        ErrorDto errorDto = ErrorDto.builder()
+                .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                .message("An unexpected error occurred")
                 .build();
         return new ResponseEntity<>(errorDto, HttpStatus.INTERNAL_SERVER_ERROR);
     }
