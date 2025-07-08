@@ -3,6 +3,7 @@ package org.zr.restaurant.services.impl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -11,6 +12,7 @@ import org.zr.restaurant.services.StorageService;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -56,13 +58,28 @@ public class FileSystemStorageService implements StorageService {
             try (InputStream inputStream = file.getInputStream()) {
                 Files.copy(inputStream, destinationFile, StandardCopyOption.REPLACE_EXISTING);
             }
+
+            return finalFileName;
+
         } catch (IOException e) {
             throw new StorageException("Failed to store file", e);
         }
     }
 
     @Override
-    public Optional<Resource> loadAsResource(String id) {
-        return Optional.empty();
+    public Optional<Resource> loadAsResource(String filename) {
+        try {
+            Path file = rootLocation.resolve(filename);
+            Resource resource = new UrlResource(file.toUri());
+            if (resource.exists() || resource.isReadable()) {
+                return Optional.of(resource);
+            } else {
+                return Optional.empty();
+            }
+        } catch (MalformedURLException e) {
+            log.warn("Could not read file {}", filename, e);
+            return Optional.empty();
+        }
     }
+
 }
