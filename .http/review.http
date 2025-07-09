@@ -6,5 +6,5 @@ Authorization: Bearer {{JWT_TOKEN}}
 {
   "rating": 3,
   "content": "Average experience.",
-  "photoIds": [{{UPLOADED_PHOTO_URL}}]
+  "photoIds": ["{{PHOTO_URL}}"]
 }

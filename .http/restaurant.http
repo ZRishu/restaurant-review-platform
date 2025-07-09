@@ -45,7 +45,7 @@ Authorization: Bearer {{JWT_TOKEN}}
       "closeTime": "16:00"
     }
   },
-  "photoIds": [{{PHOTO_URL}}]
+  "photoIds": ["{{PHOTO_URL}}"]
 }
 
 ### Retrieve all the Restaurants
@@ -101,7 +101,7 @@ Authorization: Bearer {{JWT_TOKEN}}
       "closeTime": "16:00"
     }
   },
-  "photoIds": [{{PHOTO_URL}}]
+  "photoIds": ["{{PHOTO_URL}}"]
 }
 
 ### Delete Restaurant by ID
