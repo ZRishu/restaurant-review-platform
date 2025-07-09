@@ -11,6 +11,7 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 import org.springframework.data.elasticsearch.annotations.GeoPointField;
 import org.springframework.data.elasticsearch.core.geo.GeoPoint;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Document(indexName = "restaurants")
@@ -45,10 +46,10 @@ public class Restaurant {
     private OperatingHours operatingHours;
 
     @Field(type = FieldType.Nested)
-    private List<Photo> photos;
+    private List<Photo> photos = new ArrayList<>();
 
     @Field(type = FieldType.Nested)
-    private List<Review> reviews;
+    private List<Review> reviews = new ArrayList<>();
 
     @Field(type = FieldType.Nested)
     private User createdBy;
