@@ -103,3 +103,7 @@ Authorization: Bearer {{JWT_TOKEN}}
   },
   "photoIds": ["0cbb89e2-f786-47fb-88e1-3ebd60b530e2.jpg"]
 }
+
+### Delete Restaurant by ID
+DELETE {{BASE_URL}}/api/restaurants/{{RESTAURANT_ID}}
+Authorization: Bearer {{JWT_TOKEN}}
