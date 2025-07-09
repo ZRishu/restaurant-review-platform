@@ -48,5 +48,8 @@ Authorization: Bearer {{JWT_TOKEN}}
   "photoIds": ["0cbb89e2-f786-47fb-88e1-3ebd60b530e2.jpg"]
 }
 
-### Retrieve the uploaded photo
+### Retrieve all the restaurants
 GET {{BASE_URL}}/api/restaurants
+
+### Retrieve restaurant by ID
+GET {{BASE_URL}}/api/restaurants/{{RESTAURANT_ID}}
