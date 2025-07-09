@@ -33,4 +33,6 @@ public class RestaurantDto {
     private List<ReviewDto> reviews;
 
     private UserDto createdBy;
+
+    private Integer totalReviews;
 }
