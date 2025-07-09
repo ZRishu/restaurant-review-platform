@@ -1,0 +1,49 @@
+### Create Restaurant - Minimal Valid Request
+POST {{BASE_URL}}/api/restaurants
+Content-Type: application/json
+Authorization: Bearer {{JWT_TOKEN}}
+
+{
+  "name": "Quick Bites Cafe",
+  "cuisineType": "Indian",
+  "contactInformation": "info@quickbites.com",
+  "address": {
+    "streetNumber": "456",
+    "streetName": "MG Road",
+    "city": "Delhi",
+    "state": "Delhi NCR",
+    "postalCode": "100001",
+    "country": "India"
+  },
+  "operatingHours": {
+    "monday": {
+      "openTime": "09:00",
+      "closeTime": "17:00"
+    },
+    "tuesday": {
+      "openTime": "09:00",
+      "closeTime": "17:00"
+    },
+    "wednesday": {
+      "openTime": "09:00",
+      "closeTime": "17:00"
+    },
+    "thursday": {
+      "openTime": "09:00",
+      "closeTime": "17:00"
+    },
+    "friday": {
+      "openTime": "09:00",
+      "closeTime": "17:00"
+    },
+    "saturday": {
+      "openTime": "10:00",
+      "closeTime": "16:00"
+    },
+    "sunday": {
+      "openTime": "10:00",
+      "closeTime": "16:00"
+    }
+  },
+  "photoIds": ["0cbb89e2-f786-47fb-88e1-3ebd60b530e2.jpg"]
+}
