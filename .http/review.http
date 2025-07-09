@@ -1,0 +1,10 @@
+### Create Review
+POST {{BASE_URL}}/api/restaurants/{{RESTAURANT_ID}}/reviews
+Content-Type: application/json
+Authorization: Bearer {{JWT_TOKEN}}
+
+{
+  "rating": 3,
+  "content": "Average experience.",
+  "photoIds": ["0cbb89e2-f786-47fb-88e1-3ebd60b530e2.jpg"]
+}
