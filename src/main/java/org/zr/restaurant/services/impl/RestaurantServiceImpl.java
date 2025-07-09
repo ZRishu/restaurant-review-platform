@@ -5,11 +5,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.geo.GeoPoint;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.zr.restaurant.domain.GeoLocation;
 import org.zr.restaurant.domain.RestaurantCreateUpdateRequest;
 import org.zr.restaurant.domain.entities.Address;
 import org.zr.restaurant.domain.entities.Photo;
 import org.zr.restaurant.domain.entities.Restaurant;
+import org.zr.restaurant.exceptions.RestaurantNotFoundException;
 import org.zr.restaurant.repositories.RestaurantRepository;
 import org.zr.restaurant.services.GeoLocationService;
 import org.zr.restaurant.services.RestaurantService;
@@ -77,5 +79,32 @@ public class RestaurantServiceImpl implements RestaurantService {
     @Override
     public Optional<Restaurant> getRestaurant(String id) {
         return restaurantRepository.findById(id);
+    }
+
+    @Transactional
+    @Override
+    public Restaurant updateRestaurant(String id, RestaurantCreateUpdateRequest request) {
+
+        Restaurant restaurant = getRestaurant(id)
+                .orElseThrow(() -> new RestaurantNotFoundException("Restaurant with id: " + id + " does not exist"));
+
+        GeoLocation newGeoLocation = geoLocationService.geoLocate(request.getAddress());
+        GeoPoint newGeoPoint = new GeoPoint(newGeoLocation.getLatitude(), newGeoLocation.getLongitude());
+
+        List<String> photoIds = request.getPhotoIds();
+        List<Photo> photos = photoIds.stream().map(photoUrl -> Photo.builder()
+                .url(photoUrl)
+                .uploadDate(LocalDateTime.now())
+                .build()).toList();
+
+        restaurant.setName(request.getName());
+        restaurant.setCuisineType(request.getCuisineType());
+        restaurant.setContactInformation(request.getContactInformation());
+        restaurant.setAddress(request.getAddress());
+        restaurant.setGeolocation(newGeoPoint);
+        restaurant.setOperatingHours(request.getOperatingHours());
+        restaurant.setPhotos(photos);
+
+        return restaurantRepository.save(restaurant);
     }
 }
