@@ -27,9 +27,9 @@ public class PhotoController {
         return photoMapper.toDto(savedPhoto);
     }
 
-    @GetMapping(path = "/{id:.+}")
-    public ResponseEntity<Resource> getPhoto(@PathVariable String id) {
-        return photoService.getPhotoAsResource(id).map(photo ->
+    @GetMapping(path = "/{filename:.+}")
+    public ResponseEntity<Resource> getPhoto(@PathVariable String filename) {
+        return photoService.getPhotoAsResource(filename).map(photo ->
                 ResponseEntity.ok()
                         .contentType(
                                 MediaTypeFactory.getMediaType(photo)
