@@ -14,6 +14,8 @@ import org.zr.restaurant.domain.entities.Restaurant;
 import org.zr.restaurant.mappers.RestaurantMapper;
 import org.zr.restaurant.services.RestaurantService;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping(path = "/api/restaurants")
 @RequiredArgsConstructor
@@ -51,5 +53,12 @@ public class RestaurantController {
         );
 
         return searchResults.map(restaurantMapper::toSummaryDto);
+    }
+
+    @GetMapping(path = "/{restaurant_id}")
+    public ResponseEntity<RestaurantDto> getRestaurant(@PathVariable String restaurant_id) {
+        return restaurantService.getRestaurant(restaurant_id)
+                .map(restaurant -> ResponseEntity.ok(restaurantMapper.toRestaurantDto(restaurant)))
+                .orElse(ResponseEntity.notFound().build());
     }
 }
