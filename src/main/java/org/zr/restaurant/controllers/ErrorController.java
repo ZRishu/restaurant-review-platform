@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.zr.restaurant.domain.dtos.ErrorDto;
 import org.zr.restaurant.exceptions.BaseException;
 import org.zr.restaurant.exceptions.RestaurantNotFoundException;
+import org.zr.restaurant.exceptions.ReviewNotAllowedException;
 import org.zr.restaurant.exceptions.StorageException;
 
 import java.util.stream.Collectors;
@@ -18,6 +19,17 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 @Slf4j
 public class ErrorController {
+
+    @ExceptionHandler(ReviewNotAllowedException.class)
+    public ResponseEntity<ErrorDto> handleReviewNotAllowedException(ReviewNotAllowedException ex) {
+        log.error("Caught ReviewNotAllowedException", ex);
+
+        ErrorDto errorDto = ErrorDto.builder()
+                .status(HttpStatus.BAD_REQUEST.value())
+                .message("The specified review cannot be created or updated")
+                .build();
+        return new ResponseEntity<>(errorDto, HttpStatus.BAD_REQUEST);
+    }
 
     @ExceptionHandler(RestaurantNotFoundException.class)
     public ResponseEntity<ErrorDto> handleRestaurantNotFoundException(RestaurantNotFoundException ex) {
