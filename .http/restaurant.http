@@ -107,3 +107,5 @@ Authorization: Bearer {{JWT_TOKEN}}
 ### Delete Restaurant by ID
 DELETE {{BASE_URL}}/api/restaurants/{{RESTAURANT_ID}}
 Authorization: Bearer {{JWT_TOKEN}}
+
+###

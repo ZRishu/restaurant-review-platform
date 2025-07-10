@@ -14,8 +14,6 @@ import org.zr.restaurant.domain.entities.Restaurant;
 import org.zr.restaurant.mappers.RestaurantMapper;
 import org.zr.restaurant.services.RestaurantService;
 
-import java.util.Optional;
-
 @RestController
 @RequestMapping(path = "/api/restaurants")
 @RequiredArgsConstructor

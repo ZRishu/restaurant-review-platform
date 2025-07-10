@@ -7,7 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.zr.restaurant.domain.entities.OperatingHours;
 
 import java.util.List;
 
