@@ -11,5 +11,5 @@ Content-Type: image/jpeg
 < resources/test.jpeg
 --WebAppBoundary--
 
-### Retrieve the uploaded photo
+### Retrieve the uploaded Photo
 GET {{BASE_URL}}/api/photos/{{PHOTO_URL}}
