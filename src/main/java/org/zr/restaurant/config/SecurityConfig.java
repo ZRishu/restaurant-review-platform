@@ -21,6 +21,11 @@ public class SecurityConfig {
                 requests ->
                         requests.requestMatchers(HttpMethod.GET, "/api/photos/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/restaurants/**").permitAll()
+                                .requestMatchers(
+                                    "/v3/api-docs/**",
+                                    "/swagger-ui/**",
+                                    "/swagger-ui.html"
+                                ).permitAll()
                                 .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(
