@@ -2,6 +2,10 @@ package org.zr.restaurant.controllers;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -31,6 +35,20 @@ public class ReviewController {
         ReviewCreateUpdateRequest reviewCreateUpdateRequest = reviewMapper.toReviewCreateUpdateRequest(requestDto);
         Review createdReview = reviewService.createReview(jwtToUser(jwt), restaurantId, reviewCreateUpdateRequest);
         return ResponseEntity.ok(reviewMapper.toDto(createdReview));
+    }
+
+    @GetMapping
+    public Page<ReviewDto> listReviews(
+            @PathVariable("restaurant_id") String restaurantId,
+            @PageableDefault(
+                    size = 20,
+                    page = 0,
+                    sort = "datePosted",
+                    direction = Sort.Direction.DESC) Pageable pageable
+            ) {
+        return reviewService
+                .listReviews(restaurantId, pageable)
+                .map(reviewMapper::toDto);
     }
 
     private User jwtToUser(Jwt jwt) {
