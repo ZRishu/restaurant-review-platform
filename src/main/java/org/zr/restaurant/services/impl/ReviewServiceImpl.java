@@ -150,6 +150,24 @@ public class ReviewServiceImpl implements ReviewService {
         return existingReview;
     }
 
+    @Transactional
+    @Override
+    public void deleteReview(User author, String restaurantId, String reviewId) {
+        Restaurant restaurant = getRestaurantOrThrow(restaurantId);
+
+        Review existingReview = getReviewFromRestaurant(reviewId, restaurant)
+                .orElseThrow(() -> new ReviewNotAllowedException("Review does not exist"));
+
+        if (!author.getId().equals(existingReview.getWrittenBy().getId())) {
+            throw new ReviewNotAllowedException("Cannot delete another user's review");
+        }
+
+        restaurant.getReviews().remove(existingReview);
+        updateRestaurantAverageRating(restaurant);
+
+        restaurantRepository.save(restaurant);
+    }
+
     private static Optional<Review> getReviewFromRestaurant(String reviewId, Restaurant restaurant) {
         return restaurant.getReviews()
                 .stream().filter(r -> reviewId.equals(r.getId()))
