@@ -8,3 +8,15 @@ Authorization: Bearer {{JWT_TOKEN}}
   "content": "Average experience.",
   "photoIds": ["{{PHOTO_URL}}"]
 }
+
+### Get reviews with default pagination (page=0, size=20, sort by datePosted DESC)
+GET {{BASE_URL}}/api/restaurants/{{RESTAURANT_ID}}/reviews
+
+### Get reviews with custom pagination
+GET {{BASE_URL}}/api/restaurants/{{RESTAURANT_ID}}/reviews?page=0&size=10&sort=datePosted,desc
+
+### Get reviews with multiple sort criteria
+GET {{BASE_URL}}/api/restaurants/{{RESTAURANT_ID}}/reviews?page=1&size=5&sort=rating,desc&sort=datePosted,asc
+
+### Get reviews sorted by rating (ascending)
+GET {{BASE_URL}}/api/restaurants/{{RESTAURANT_ID}}/reviews?sort=rating,asc
