@@ -23,3 +23,14 @@ GET {{BASE_URL}}/api/restaurants/{{RESTAURANT_ID}}/reviews?sort=rating,asc
 
 ### Get Review with ID
 GET {{BASE_URL}}/api/restaurants/{{RESTAURANT_ID}}/reviews/{{REVIEW_ID}}
+
+### Update Review
+PUT {{BASE_URL}}/api/restaurants/{{RESTAURANT_ID}}/reviews/{{REVIEW_ID}}
+Content-Type: application/json
+Authorization: Bearer {{JWT_TOKEN}}
+
+{
+  "rating": 4,
+  "content": "Good experience.",
+  "photoIds": ["{{PHOTO_URL}}"]
+}
