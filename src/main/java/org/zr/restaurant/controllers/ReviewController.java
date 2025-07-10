@@ -74,6 +74,16 @@ public class ReviewController {
         return ResponseEntity.ok(reviewMapper.toDto(updatedReview));
     }
 
+    @DeleteMapping(path = "/{review_id}")
+    public ResponseEntity<Void> deleteReview(
+            @PathVariable("restaurant_id") String restaurantId,
+            @PathVariable("review_id") String reviewId,
+            @AuthenticationPrincipal Jwt jwt
+    ) {
+        reviewService.deleteReview(jwtToUser(jwt), restaurantId, reviewId);
+        return ResponseEntity.noContent().build();
+    }
+
     private User jwtToUser(Jwt jwt) {
         return User.builder()
                 .id(jwt.getSubject())
