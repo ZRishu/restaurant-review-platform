@@ -34,3 +34,7 @@ Authorization: Bearer {{JWT_TOKEN}}
   "content": "Good experience.",
   "photoIds": ["{{PHOTO_URL}}"]
 }
+
+### Delete Review by ID
+DELETE {{BASE_URL}}/api/restaurants/{{RESTAURANT_ID}}/reviews/{{REVIEW_ID}}
+Authorization: Bearer {{JWT_TOKEN}}
