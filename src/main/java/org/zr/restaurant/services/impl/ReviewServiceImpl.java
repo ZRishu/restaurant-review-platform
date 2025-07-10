@@ -18,10 +18,7 @@ import org.zr.restaurant.repositories.RestaurantRepository;
 import org.zr.restaurant.services.ReviewService;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 
 @Service
@@ -105,6 +102,14 @@ public class ReviewServiceImpl implements ReviewService {
         int end = Math.min(start + pageable.getPageSize(), reviews.size());
 
         return new PageImpl<>(reviews.subList(start, end), pageable, reviews.size());
+    }
+
+    @Override
+    public Optional<Review> getReview(String restaurantId, String reviewId) {
+        Restaurant restaurant = getRestaurantOrThrow(restaurantId);
+        return restaurant.getReviews()
+                .stream().filter(r -> reviewId.equals(r.getId()))
+                .findFirst();
     }
 
     private Restaurant getRestaurantOrThrow(String restaurantId) {
